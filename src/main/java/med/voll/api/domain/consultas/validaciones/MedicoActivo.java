@@ -5,18 +5,20 @@ import med.voll.api.domain.consultas.DatosAgendarConsulta;
 import med.voll.api.domain.medico.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class MedicoActivo implements ValidadorDeConsultas{
     @Autowired
-    private MedicoRepository medicoRepository;
+    private MedicoRepository repository;
 
-    public void validar(DatosAgendarConsulta datos){
-        var medicoActivo = medicoRepository.findActivoById(datos.idMedico());
-
+    public void validar(DatosAgendarConsulta datos) {
+        if(datos.idMedico()==null){
+            return;
+        }
+        var medicoActivo=repository.findActivoById(datos.idMedico());
         if(!medicoActivo){
-            throw new ValidationException("No se agendan citas a Medicos inactivos");
+            throw new ValidationException("No se puede permitir agendar citas con medicos inactivos en el sistema");
         }
     }
-
 }

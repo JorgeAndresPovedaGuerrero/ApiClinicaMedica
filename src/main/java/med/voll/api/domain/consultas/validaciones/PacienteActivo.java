@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class PacienteActivo implements ValidadorDeConsultas{
     @Autowired
-    private PacienteRepository pacienteRepository;
+    private PacienteRepository repository;
+
     public void validar(DatosAgendarConsulta datos){
         if(datos.idPaciente()==null){
             return;
         }
-        var pacienteActivo = pacienteRepository.findActivoById(datos.idPaciente());
+        var pacienteActivo=repository.findActivoById(datos.idPaciente());
 
         if(!pacienteActivo){
-            throw new ValidationException("No se agendan citas a pacientes inactivos");
+            throw new ValidationException("No se puede permitir agendar citas con pacientes inactivos en el sistema");
         }
-
     }
 }
